@@ -7,18 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22658014284E48DD00AA55E3 /* ColorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22658013284E48DD00AA55E3 /* ColorLibrary.swift */; };
+		227284E5284A170000E9A9A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284E4284A170000E9A9A1 /* ViewController.swift */; };
+		227284E7284A861200E9A9A1 /* AudioSpectogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284E6284A861200E9A9A1 /* AudioSpectogram.swift */; };
+		227284E9284A864200E9A9A1 /* AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284E8284A864200E9A9A1 /* AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift */; };
+		227284EC284B8EFC00E9A9A1 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 227284EB284B8EFC00E9A9A1 /* AudioKit */; };
+		227284EE284B8F1B00E9A9A1 /* FrequencyMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284ED284B8F1B00E9A9A1 /* FrequencyMonitor.swift */; };
+		227284F0284B9A0900E9A9A1 /* ScreenMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284EF284B9A0900E9A9A1 /* ScreenMode.swift */; };
 		22B45000281AABAC003C0132 /* Music_FlashlightApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B44FFF281AABAC003C0132 /* Music_FlashlightApp.swift */; };
 		22B45002281AABAC003C0132 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B45001281AABAC003C0132 /* ContentView.swift */; };
 		22B45004281AABAE003C0132 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B45003281AABAE003C0132 /* Assets.xcassets */; };
 		22B45007281AABAE003C0132 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B45006281AABAE003C0132 /* Preview Assets.xcassets */; };
+		22B4500E281AADF1003C0132 /* AudioMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B4500D281AADF1003C0132 /* AudioMonitor.swift */; };
+		22DA51C02849520400696463 /* SpectrumMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA51BF2849520400696463 /* SpectrumMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22658013284E48DD00AA55E3 /* ColorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorLibrary.swift; sourceTree = "<group>"; };
+		227284E4284A170000E9A9A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		227284E6284A861200E9A9A1 /* AudioSpectogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSpectogram.swift; sourceTree = "<group>"; };
+		227284E8284A864200E9A9A1 /* AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift"; sourceTree = "<group>"; };
+		227284ED284B8F1B00E9A9A1 /* FrequencyMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyMonitor.swift; sourceTree = "<group>"; };
+		227284EF284B9A0900E9A9A1 /* ScreenMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenMode.swift; sourceTree = "<group>"; };
 		22B44FFC281AABAC003C0132 /* Music Flashlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Music Flashlight.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B44FFF281AABAC003C0132 /* Music_FlashlightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music_FlashlightApp.swift; sourceTree = "<group>"; };
 		22B45001281AABAC003C0132 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		22B45003281AABAE003C0132 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22B45006281AABAE003C0132 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		22B4500D281AADF1003C0132 /* AudioMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMonitor.swift; sourceTree = "<group>"; };
+		22DA51BF2849520400696463 /* SpectrumMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				227284EC284B8EFC00E9A9A1 /* AudioKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,8 +69,16 @@
 		22B44FFE281AABAC003C0132 /* Music Flashlight */ = {
 			isa = PBXGroup;
 			children = (
+				227284EF284B9A0900E9A9A1 /* ScreenMode.swift */,
+				227284E4284A170000E9A9A1 /* ViewController.swift */,
 				22B44FFF281AABAC003C0132 /* Music_FlashlightApp.swift */,
 				22B45001281AABAC003C0132 /* ContentView.swift */,
+				22B4500D281AADF1003C0132 /* AudioMonitor.swift */,
+				227284ED284B8F1B00E9A9A1 /* FrequencyMonitor.swift */,
+				22DA51BF2849520400696463 /* SpectrumMonitor.swift */,
+				227284E6284A861200E9A9A1 /* AudioSpectogram.swift */,
+				22658013284E48DD00AA55E3 /* ColorLibrary.swift */,
+				227284E8284A864200E9A9A1 /* AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift */,
 				22B45003281AABAE003C0132 /* Assets.xcassets */,
 				22B45005281AABAE003C0132 /* Preview Content */,
 			);
@@ -83,6 +109,9 @@
 			dependencies = (
 			);
 			name = "Music Flashlight";
+			packageProductDependencies = (
+				227284EB284B8EFC00E9A9A1 /* AudioKit */,
+			);
 			productName = "Music Flashlight";
 			productReference = 22B44FFC281AABAC003C0132 /* Music Flashlight.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +140,9 @@
 				Base,
 			);
 			mainGroup = 22B44FF3281AABAC003C0132;
+			packageReferences = (
+				227284EA284B8EFC00E9A9A1 /* XCRemoteSwiftPackageReference "AudioKit" */,
+			);
 			productRefGroup = 22B44FFD281AABAC003C0132 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,8 +169,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				227284E5284A170000E9A9A1 /* ViewController.swift in Sources */,
+				22658014284E48DD00AA55E3 /* ColorLibrary.swift in Sources */,
+				227284E9284A864200E9A9A1 /* AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift in Sources */,
+				227284E7284A861200E9A9A1 /* AudioSpectogram.swift in Sources */,
+				227284EE284B8F1B00E9A9A1 /* FrequencyMonitor.swift in Sources */,
 				22B45002281AABAC003C0132 /* ContentView.swift in Sources */,
 				22B45000281AABAC003C0132 /* Music_FlashlightApp.swift in Sources */,
+				22B4500E281AADF1003C0132 /* AudioMonitor.swift in Sources */,
+				22DA51C02849520400696463 /* SpectrumMonitor.swift in Sources */,
+				227284F0284B9A0900E9A9A1 /* ScreenMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +310,7 @@
 				DEVELOPMENT_TEAM = P374GYFG4W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is required, to light the flashlight.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +340,7 @@
 				DEVELOPMENT_TEAM = P374GYFG4W;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is required, to light the flashlight.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -339,6 +381,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		227284EA284B8EFC00E9A9A1 /* XCRemoteSwiftPackageReference "AudioKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AudioKit/AudioKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		227284EB284B8EFC00E9A9A1 /* AudioKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 227284EA284B8EFC00E9A9A1 /* XCRemoteSwiftPackageReference "AudioKit" */;
+			productName = AudioKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 22B44FF4281AABAC003C0132 /* Project object */;
 }
