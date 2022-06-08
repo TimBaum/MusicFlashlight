@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2235C1DD28512B870011DD3D /* Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2235C1DC28512B870011DD3D /* Control.swift */; };
 		224099DD2850D4D5006A1CF3 /* Circle Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224099DC2850D4D5006A1CF3 /* Circle Animation.swift */; };
 		22658014284E48DD00AA55E3 /* ColorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22658013284E48DD00AA55E3 /* ColorLibrary.swift */; };
 		227284E5284A170000E9A9A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284E4284A170000E9A9A1 /* ViewController.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2235C1DC28512B870011DD3D /* Control.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Control.swift; sourceTree = "<group>"; };
 		224099DC2850D4D5006A1CF3 /* Circle Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Circle Animation.swift"; sourceTree = "<group>"; };
 		22658013284E48DD00AA55E3 /* ColorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorLibrary.swift; sourceTree = "<group>"; };
 		227284E4284A170000E9A9A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				227284E4284A170000E9A9A1 /* ViewController.swift */,
 				22B44FFF281AABAC003C0132 /* Music_FlashlightApp.swift */,
 				22B45001281AABAC003C0132 /* ContentView.swift */,
+				2235C1DC28512B870011DD3D /* Control.swift */,
 				22B4500D281AADF1003C0132 /* AudioMonitor.swift */,
 				224099DC2850D4D5006A1CF3 /* Circle Animation.swift */,
 				227284ED284B8F1B00E9A9A1 /* FrequencyMonitor.swift */,
@@ -177,6 +180,7 @@
 				227284E9284A864200E9A9A1 /* AudioSpectrogram+AVCaptureAudioDataOutputSampleBufferDelegate.swift in Sources */,
 				227284E7284A861200E9A9A1 /* AudioSpectogram.swift in Sources */,
 				227284EE284B8F1B00E9A9A1 /* FrequencyMonitor.swift in Sources */,
+				2235C1DD28512B870011DD3D /* Control.swift in Sources */,
 				22B45002281AABAC003C0132 /* ContentView.swift in Sources */,
 				22B45000281AABAC003C0132 /* Music_FlashlightApp.swift in Sources */,
 				224099DD2850D4D5006A1CF3 /* Circle Animation.swift in Sources */,

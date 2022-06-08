@@ -15,11 +15,15 @@ struct ContentView: View {
     
     @ObservedObject private var mic = AudioMonitor()
     
-    @State var active = false
+    @State var torchMode = false
     @State var threshold: Float = -30.0
     @State var strictMode = false
-    @State var screenModeActivated = false
+    @State var screenMode = false
     @State var animationSides = Double(0)
+    
+    @State var textMode = false
+    @State var displayText = ""
+    
     @ObservedObject var audioSpectogram = AudioSpectrogram()
     @ObservedObject var colorLibrary = ColorLibrary()
     
@@ -39,52 +43,30 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             //Background for screen mode
-            if screenModeActivated {
+            if screenMode {
 //                colorLibrary.colors[audioSpectogram.valuesP.firstIndex(of: audioSpectogram.valuesP.max()!) ?? 0]
                 Color(colorLibrary.color)
                     .ignoresSafeArea()
                 AnimatedBackground()
                     .ignoresSafeArea()
             }
-            else {
+            else if (!screenMode && torchMode && !textMode) {
             //White or black overlay
             Color(.black)
                 .opacity(mic.volume > threshold ? calculateOpacity(volume: mic.volume, threshold: threshold) : 0.6)
                 .ignoresSafeArea()
             }
             VStack {
-                Button {
-                    if screenModeActivated == false {
-                        active = false
-                        audioSpectogram.startRunning()
-                    }
-                    else {
-                        audioSpectogram.stopRunning()
-                    }
-                    screenModeActivated.toggle()
-                } label: {
-                    Text("Screen Mode")
-                        .foregroundColor(screenModeActivated ? .black : .white)
-                        .font(.headline)
-                        .padding(10)
-                        .background(RoundedRectangle(
-                            cornerRadius: 10
-                        )
-                            .fill(Color(screenModeActivated ? .white : .black))
-                            .shadow(radius: 5)
-                        )
-                }
-                
                 Spacer()
-                if !screenModeActivated {
+                if (!screenMode && torchMode && !textMode) {
                     //MARK: Flashlight Mode
                     Button {
-                        self.active.toggle()
+                        self.torchMode.toggle()
                         mic.toggleMonitoring()
                     } label: {
                         Image("Lightning")
                             .resizable()
-                            .foregroundColor(active ? enabledColor : disabledColor)
+                            .foregroundColor(torchMode ? enabledColor : disabledColor)
                             .aspectRatio(contentMode: .fit)
                             .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.4), radius: 5, x: 0, y: 20)
                             .frame(height: mic.volume > threshold ? CGFloat(400 + 120 * calculateOffset(volume: mic.volume, threshold: threshold)) : 400)
@@ -94,36 +76,8 @@ struct ContentView: View {
                         .padding(.horizontal)
                         .padding(.bottom)
                     
-                    HStack{
-                        Text("Sensitivity")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding(.leading)
-                        Spacer()
-                    }
-                    VStack {
-                        Slider(
-                            value: $threshold,
-                            in: -60...0
-                        ){
-                            Text("Speed")
-                        } minimumValueLabel: {
-                            Text("High")
-                                .foregroundColor(.white)
-                        } maximumValueLabel: {
-                            Text("Low")
-                                .foregroundColor(.white)
-                        }
-                        //                    Text("Threshold: \(threshold, specifier: "%.0f")db")
-                        //                        .foregroundColor(.white)
-                    }
-                    .padding(.horizontal)
-                    Toggle(isOn: $strictMode) {
-                        Text("Strict Mode")
-                            .foregroundColor(.white)
-                    }
-                    .padding(.horizontal)
-                } else {
+//
+                } else if (screenMode) {
                     //MARK: Screen Mode
                     Example4(sides: $animationSides)
                         .frame(height: 250)
@@ -143,6 +97,7 @@ struct ContentView: View {
                     }
                     .frame(height: 200)
                 }
+                Controls(screenMode: $screenMode, torchMode: $torchMode, textMode: $textMode, threshold: $threshold, strictMode: $strictMode, displayedText: $displayText)
             }
         }
         .onChange(of: threshold) { treshold in
@@ -155,10 +110,30 @@ struct ContentView: View {
             colorLibrary.updateHue(frequencyValues: values)
             animationSides = Double((values.reduce(0, +) / 50))
         }
+        .onChange(of: screenMode) {to in
+            if to {
+                textMode = false
+                audioSpectogram.startRunning()
+            } else {
+                audioSpectogram.stopRunning()
+            }
+        }
+        .onChange(of: textMode) {to in
+            if to == true {
+                screenMode = false
+            }
+        }
+        .onChange(of: torchMode) {_ in
+            mic.toggleMonitoring()
+        }
         //Show the image when screen mode not activated, else show no background
-        .background(!screenModeActivated ? Image("chromeBackground")
+        .background(!screenMode ? Image("chromeBackground")
             .resizable()
             .ignoresSafeArea() : nil)
+        .onAppear() {
+            //Disable the device from going into lockscreen when using the app
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
     }
 }
 
@@ -211,3 +186,4 @@ struct AnimatedBackground: View {
 }
 
 //colorLibrary.colors[audioSpectogram.valuesP.firstIndex(of: audioSpectogram.valuesP.max()!) ?? 0]
+
