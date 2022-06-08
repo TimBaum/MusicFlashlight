@@ -17,7 +17,7 @@ public class AudioSpectrogram: NSObject, ObservableObject {
         configureCaptureSession()
         audioOutput.setSampleBufferDelegate(self,
                                             queue: captureQueue)
-        self.startRunning()
+        //self.startRunning()
     }
     
     required init?(coder: NSCoder) {
@@ -65,7 +65,7 @@ public class AudioSpectrogram: NSObject, ObservableObject {
     var frequencyDomainBuffer = [Float](repeating: 0,
                                         count: sampleCount)
     
-    @Published var valuesP: [Float] = []
+    @Published var valuesP = [Float](repeating: 0.0, count: 9)
     
     // MARK: Instance Methods
     
@@ -75,7 +75,6 @@ public class AudioSpectrogram: NSObject, ObservableObject {
     /// * Perform a forward discrete cosine transform.
     /// * Convert frequency domain values to decibels.
     func processData(values: [Int16]) {
-        print(values.count)
         dispatchSemaphore.wait()
         
         vDSP.convertElements(of: values,
@@ -95,10 +94,12 @@ public class AudioSpectrogram: NSObject, ObservableObject {
                      toDecibels: &frequencyDomainBuffer,
                      zeroReference: Float(AudioSpectrogram.sampleCount))
         
-        valuesP = reduceDataUnevenly(data: frequencyDomainBuffer, numberOfBars: 16)
-                
+        //Throws warning during runtime, but I could not find a solution to this issue
+        self.valuesP = self.reduceDataUnevenly(data: self.frequencyDomainBuffer)
+        
         dispatchSemaphore.signal()
         }
+    
     func reduceData(data: [Float], numberOfBars: Int) -> [Float]{
         var res: [Float] = []
         let len = data.count / numberOfBars
@@ -109,16 +110,17 @@ public class AudioSpectrogram: NSObject, ObservableObject {
             }
             res.append(sum/Float(len))
         }
+        //Avoid problems with dividing by zero or multiplying by zero
         for i in 0 ..< res.count {
-            if res[i] < 0 {
-                res[i] = 0
+            if res[i] < 1 {
+                res[i] = 1
             }
             
         }
         return res
     }
     
-    func reduceDataUnevenly(data: [Float], numberOfBars: Int) -> [Float]{
+    func reduceDataUnevenly(data: [Float]) -> [Float]{
         var res: [Float] = []
         let arr = [0, 2, 5, 11, 26, 51, 101, 251, 501, 800] //ranges oriented off normal spectograms
         for i in 0...arr.count-2 {
@@ -135,7 +137,6 @@ public class AudioSpectrogram: NSObject, ObservableObject {
             }
             
         }
-        print(res)
         return res
     }
 }

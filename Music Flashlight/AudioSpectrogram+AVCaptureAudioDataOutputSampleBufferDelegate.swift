@@ -45,6 +45,8 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             self.rawAudioData.removeFirst(AudioSpectrogram.hopCount)
             self.processData(values: dataToProcess)
         }
+        //Slow down the process
+        //usleep(20000)
     }
     
     func configureCaptureSession() {
@@ -108,6 +110,12 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             if AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
                 self.captureSession.startRunning()
             }
+        }
+    }
+    
+    func stopRunning() {
+        if self.captureSession.isRunning {
+            self.captureSession.stopRunning()
         }
     }
 }

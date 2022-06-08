@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		224099DD2850D4D5006A1CF3 /* Circle Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224099DC2850D4D5006A1CF3 /* Circle Animation.swift */; };
 		22658014284E48DD00AA55E3 /* ColorLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22658013284E48DD00AA55E3 /* ColorLibrary.swift */; };
 		227284E5284A170000E9A9A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284E4284A170000E9A9A1 /* ViewController.swift */; };
 		227284E7284A861200E9A9A1 /* AudioSpectogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227284E6284A861200E9A9A1 /* AudioSpectogram.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		224099DC2850D4D5006A1CF3 /* Circle Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Circle Animation.swift"; sourceTree = "<group>"; };
 		22658013284E48DD00AA55E3 /* ColorLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorLibrary.swift; sourceTree = "<group>"; };
 		227284E4284A170000E9A9A1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		227284E6284A861200E9A9A1 /* AudioSpectogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSpectogram.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				22B44FFF281AABAC003C0132 /* Music_FlashlightApp.swift */,
 				22B45001281AABAC003C0132 /* ContentView.swift */,
 				22B4500D281AADF1003C0132 /* AudioMonitor.swift */,
+				224099DC2850D4D5006A1CF3 /* Circle Animation.swift */,
 				227284ED284B8F1B00E9A9A1 /* FrequencyMonitor.swift */,
 				22DA51BF2849520400696463 /* SpectrumMonitor.swift */,
 				227284E6284A861200E9A9A1 /* AudioSpectogram.swift */,
@@ -176,6 +179,7 @@
 				227284EE284B8F1B00E9A9A1 /* FrequencyMonitor.swift in Sources */,
 				22B45002281AABAC003C0132 /* ContentView.swift in Sources */,
 				22B45000281AABAC003C0132 /* Music_FlashlightApp.swift in Sources */,
+				224099DD2850D4D5006A1CF3 /* Circle Animation.swift in Sources */,
 				22B4500E281AADF1003C0132 /* AudioMonitor.swift in Sources */,
 				22DA51C02849520400696463 /* SpectrumMonitor.swift in Sources */,
 				227284F0284B9A0900E9A9A1 /* ScreenMode.swift in Sources */,
