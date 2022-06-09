@@ -45,11 +45,9 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
             self.rawAudioData.removeFirst(AudioSpectrogram.hopCount)
             self.processData(values: dataToProcess)
         }
-        //Slow down the process
-        //usleep(20000)
     }
     
-    //ask for permission to capture audio
+    //ask for permission to capture audio and configure audio session
     func configureCaptureSession() {
         switch AVCaptureDevice.authorizationStatus(for: .audio) {
             case .authorized:
@@ -71,6 +69,14 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
                 fatalError("App requires microphone access.")
         }
         
+        configureAudioSession()
+        
+    }
+    
+    /**
+     Configure the audio session
+     */
+    private func configureAudioSession() {
         captureSession.beginConfiguration()
         
         if captureSession.canAddOutput(audioOutput) {
@@ -94,7 +100,7 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         captureSession.commitConfiguration()
     }
     
-    /// Starts the audio spectrogram.
+    /// Starts the recording and therefore the spectogram
     func startRunning() {
         sessionQueue.async {
             if AVCaptureDevice.authorizationStatus(for: .audio) == .authorized {
@@ -103,6 +109,9 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         }
     }
     
+    /**
+     stops the recording
+     */
     func stopRunning() {
         if self.captureSession.isRunning {
             self.captureSession.stopRunning()

@@ -65,15 +65,17 @@ class ColorLibrary: ObservableObject {
             return 0
         }
         
-        var ratio =  lowerBand/higherBand
+        var ratio = lowerBand/higherBand
         
         // if the ratio is higher than 1, we take the inverse to find the updating value
-        // if the ratio is smaller than 1, it means that the lower band is higher. Therefore the hue update value should be negative (higher frequency ~ lower hue)
-        
-        //TODO: it doesnt make sense, since values closer to the frequency update the hue faster. I think it should be 1-ratio as the update value
         if ratio > 1 {
             ratio = 1 / ratio
-        } else {
+        }
+        //-1 to
+        ratio = 1 - ratio
+        
+        //When the lower band is higher, the hue update value should be negative (higher frequency ~ lower hue)
+        if lowerBand < higherBand {
             ratio *= -1
         }
         let value = Float(ratio/300) //300 to make the process of updating the hue slower

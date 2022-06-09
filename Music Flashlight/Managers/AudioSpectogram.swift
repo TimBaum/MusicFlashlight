@@ -62,6 +62,7 @@ public class AudioSpectrogram: NSObject, ObservableObject {
     var frequencyDomainBuffer = [Float](repeating: 0,
                                         count: sampleCount)
     
+    /// The array containing the reduced data for the bars
     @Published var valuesP = [Float](repeating: 0.0, count: 9)
     
     // MARK: Instance Methods
@@ -75,6 +76,7 @@ public class AudioSpectrogram: NSObject, ObservableObject {
         //waits until the kernel is available
         dispatchSemaphore.wait()
         
+        //a lot of processing to get the decibels of the frequencies, this process is runtime intensive
         vDSP.convertElements(of: values,
                              to: &timeDomainBuffer)
         
@@ -98,7 +100,7 @@ public class AudioSpectrogram: NSObject, ObservableObject {
         dispatchSemaphore.signal()
         }
     
-//    func reduceData(data: [Float], numberOfBars: Int) -> [Float]{
+//    func reduceDataEvenly(data: [Float], numberOfBars: Int) -> [Float]{
 //        var res: [Float] = []
 //        let len = data.count / numberOfBars
 //        for i in stride(from: 0, to: numberOfBars, by: 1) {
@@ -118,15 +120,16 @@ public class AudioSpectrogram: NSObject, ObservableObject {
 //        return res
 //    }
     
+    //Reduce the data to 9 data points, which are shown as the bars in the spectogram
     func reduceDataUnevenly(data: [Float]) -> [Float]{
         var res: [Float] = []
-        let arr = [0, 2, 5, 11, 26, 51, 101, 251, 501, 800] //ranges oriented off normal spectograms
+        let arr = [0, 2, 5, 11, 26, 51, 101, 251, 501, 800] //ranges oriented off normal spectograms (e.g. in DAWs)
         for i in 0...arr.count-2 {
             var sum = Float(0)
             for j in stride(from: arr[i], to: arr[i+1], by: 1) {
                 sum = sum+data[j]
             }
-            res.append(sum / Float(arr[i+1]-arr[i]) * 3) //*3 for some additional length for the bars
+            res.append(sum / Float(arr[i+1]-arr[i])) 
         }
         
         for i in 0 ..< res.count {

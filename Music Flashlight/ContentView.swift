@@ -47,7 +47,10 @@ struct ContentView: View {
      calculate opacity of the overlay
      */
     private func calculateOpacity(volume: Float, threshold: Float) -> Double {
-        let level = Double(calculateOffset(volume: mic.volume, threshold: threshold)) * 4 //find a suiting level of brightness
+        let level = 1 - Double(calculateOffset(volume: mic.volume, threshold: threshold)) * 4 //find a suiting level of brightness
+        print(level)
+        print("actual:")
+        
         if level >= 0.6 {
             return 0.6
         } else if  level <= 0.1 {
@@ -92,7 +95,7 @@ struct ContentView: View {
                             VStack{
                                 withAnimation {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .size(width: 8, height: CGFloat(value))
+                                        .size(width: 8, height: CGFloat(value) * 3)
                                         .foregroundColor(.white)
                                 }
                             }

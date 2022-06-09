@@ -73,11 +73,9 @@ struct Controls: View {
                         HStack{
                             Text("Displayed Text: ")
                                 .foregroundColor(.white)
-                            Spacer()
                             //Input text field
                             TextField("edit me", text: $displayedText)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .padding(.leading, 5)
                         }
                     }
                 }

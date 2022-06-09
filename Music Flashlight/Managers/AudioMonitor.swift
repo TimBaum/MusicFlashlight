@@ -73,7 +73,7 @@ class AudioMonitor: ObservableObject {
     /**
      control the flash based on the volume
      */
-    func toggleFlash() {
+    private func toggleFlash() {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
         guard device.hasTorch else { return }
         
