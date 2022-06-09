@@ -22,7 +22,7 @@ struct ContentView: View {
     @State var animationSides = Double(0)
     
     @State var textMode = false
-    @State var displayText = ""
+    @State var displayText = "I <3 you"
     
     @ObservedObject var audioSpectogram = AudioSpectrogram()
     @ObservedObject var colorLibrary = ColorLibrary()
@@ -44,58 +44,58 @@ struct ContentView: View {
         ZStack {
             //Background for screen mode
             if screenMode {
-//                colorLibrary.colors[audioSpectogram.valuesP.firstIndex(of: audioSpectogram.valuesP.max()!) ?? 0]
+                //                colorLibrary.colors[audioSpectogram.valuesP.firstIndex(of: audioSpectogram.valuesP.max()!) ?? 0]
                 Color(colorLibrary.color)
                     .ignoresSafeArea()
                 AnimatedBackground()
                     .ignoresSafeArea()
+            } else if (textMode) {
+                Color(.black)
+                    .ignoresSafeArea()
             }
-            else if (!screenMode && torchMode && !textMode) {
-            //White or black overlay
-            Color(.black)
-                .opacity(mic.volume > threshold ? calculateOpacity(volume: mic.volume, threshold: threshold) : 0.6)
-                .ignoresSafeArea()
+            else if (torchMode) {
+                //White or black overlay
+                Color(.black)
+                    .opacity(mic.volume > threshold ? calculateOpacity(volume: mic.volume, threshold: threshold) : 0.6)
+                    .ignoresSafeArea()
+            }
+            else {
+                LinearGradient(colors: [Color(red: 0.42, green: 0.43, blue: 0.69, opacity: 1), Color(red: 0.42, green: 0.43, blue: 0.69, opacity: 0.2)], startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
             }
             VStack {
                 Spacer()
-                if (!screenMode && torchMode && !textMode) {
-                    //MARK: Flashlight Mode
-                    Button {
-                        self.torchMode.toggle()
-                        mic.toggleMonitoring()
-                    } label: {
-                        Image("Lightning")
-                            .resizable()
-                            .foregroundColor(torchMode ? enabledColor : disabledColor)
-                            .aspectRatio(contentMode: .fit)
-                            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.4), radius: 5, x: 0, y: 20)
-                            .frame(height: mic.volume > threshold ? CGFloat(400 + 120 * calculateOffset(volume: mic.volume, threshold: threshold)) : 400)
-                    }
-                    Spacer()
-                    Divider()
-                        .padding(.horizontal)
-                        .padding(.bottom)
-                    
-//
-                } else if (screenMode) {
+                if (screenMode) {
                     //MARK: Screen Mode
                     Example4(sides: $animationSides)
                         .frame(height: 250)
                     Spacer()
                     HStack {
-                        //MARK: Spectogram
                         ForEach(audioSpectogram.valuesP, id: \.self) {value in
                             Spacer()
                             VStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .size(width: 8, height: CGFloat(value))
-                                    .foregroundColor(.white)
+                                withAnimation {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .size(width: 8, height: CGFloat(value))
+                                        .foregroundColor(.white)
+                                }
                             }
-                            
                         }
                         Spacer()
                     }
                     .frame(height: 200)
+                } else if (textMode){
+                    //MARK: Text Mode
+                    TextMode(displayedText: $displayText)
+                } else if (torchMode) {
+                    //MARK: Flashlight Mode
+                    Image("Lightning")
+                        .resizable()
+                        .foregroundColor(torchMode ? enabledColor : disabledColor)
+                        .aspectRatio(contentMode: .fit)
+                        .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.4), radius: 5, x: 0, y: 20)
+                        .frame(height: mic.volume > threshold ? CGFloat(400 + 120 * calculateOffset(volume: mic.volume, threshold: threshold)) : 400)
+                    Spacer()
                 }
                 Controls(screenMode: $screenMode, torchMode: $torchMode, textMode: $textMode, threshold: $threshold, strictMode: $strictMode, displayedText: $displayText)
             }
@@ -127,9 +127,9 @@ struct ContentView: View {
             mic.toggleMonitoring()
         }
         //Show the image when screen mode not activated, else show no background
-        .background(!screenMode ? Image("chromeBackground")
+        .background(Image("chromeBackground")
             .resizable()
-            .ignoresSafeArea() : nil)
+            .ignoresSafeArea())
         .onAppear() {
             //Disable the device from going into lockscreen when using the app
             UIApplication.shared.isIdleTimerDisabled = true
