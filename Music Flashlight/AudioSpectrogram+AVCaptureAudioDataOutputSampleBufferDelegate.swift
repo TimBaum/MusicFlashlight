@@ -49,16 +49,8 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
         //usleep(20000)
     }
     
+    //ask for permission to capture audio
     func configureCaptureSession() {
-        // Also note that:
-        //
-        // When running in iOS, you must add a "Privacy - Microphone Usage
-        // Description" entry.
-        //
-        // When running in macOS, you must add a "Privacy - Microphone Usage
-        // Description" entry to `Info.plist`, and check "audio input" and
-        // "camera access" under the "Resource Access" category of "Hardened
-        // Runtime".
         switch AVCaptureDevice.authorizationStatus(for: .audio) {
             case .authorized:
                     break
@@ -75,9 +67,7 @@ extension AudioSpectrogram: AVCaptureAudioDataOutputSampleBufferDelegate {
                 })
                 return
             default:
-                // Users can add authorization in "Settings > Privacy > Microphone"
-                // on an iOS device, or "System Preferences > Security & Privacy >
-                // Microphone" on a macOS device.
+                //error when no permissions granted
                 fatalError("App requires microphone access.")
         }
         

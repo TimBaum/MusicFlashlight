@@ -13,23 +13,39 @@ let disabledColor = Color(.gray)
 
 struct ContentView: View {
     
-    @ObservedObject private var mic = AudioMonitor()
     
+    //Modes
     @State var torchMode = false
+    @State var screenMode = false
+    @State var textMode = false
+
+    //Parameters for torch mode
     @State var threshold: Float = -30.0
     @State var strictMode = false
-    @State var screenMode = false
+    
+    //Parameter for animation in screen mode
     @State var animationSides = Double(0)
     
-    @State var textMode = false
+    //Text mode
     @State var displayText = "I <3 you"
     
+    //Monitoring audio
+    @ObservedObject private var mic = AudioMonitor()
     @ObservedObject var audioSpectogram = AudioSpectrogram()
+    
+    //Color for the background screen
     @ObservedObject var colorLibrary = ColorLibrary()
     
+    /**
+     calculate the offset for the size of the lightning
+     */
     private func calculateOffset(volume: Float, threshold: Float) -> Float {
         return (1 + (-1) * volume / threshold)
     }
+    
+    /**
+     calculate opacity of the overlay
+     */
     private func calculateOpacity(volume: Float, threshold: Float) -> Double {
         let level = Double(calculateOffset(volume: mic.volume, threshold: threshold)) * 4 //find a suiting level of brightness
         if level >= 0.6 {
@@ -42,14 +58,16 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            //Background for screen mode
             if screenMode {
-                //                colorLibrary.colors[audioSpectogram.valuesP.firstIndex(of: audioSpectogram.valuesP.max()!) ?? 0]
+                //Background for screen mode
                 Color(colorLibrary.color)
                     .ignoresSafeArea()
-                AnimatedBackground()
+                AnimatedBackground() //small animated gradient overlay for more dynamic
                     .ignoresSafeArea()
+                PolygonAnimation(sides: $animationSides)
+                    .frame(height: 250)
             } else if (textMode) {
+                //Background for text mode
                 Color(.black)
                     .ignoresSafeArea()
             }
@@ -60,19 +78,17 @@ struct ContentView: View {
                     .ignoresSafeArea()
             }
             else {
-                LinearGradient(colors: [Color(red: 0.42, green: 0.43, blue: 0.69, opacity: 1), Color(red: 0.42, green: 0.43, blue: 0.69, opacity: 0.2)], startPoint: .top, endPoint: .bottom)
+                //Screen when nothing is selected
+                LinearGradient(colors: [Color(red: 0.42, green: 0.43, blue: 0.96, opacity: 1), Color(red: 0.42, green: 0.43, blue: 0.96, opacity: 0.0)], startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
             }
             VStack {
-                Spacer()
                 if (screenMode) {
                     //MARK: Screen Mode
-                    Example4(sides: $animationSides)
-                        .frame(height: 250)
-                    Spacer()
-                    HStack {
+                    HStack(alignment: .center) {
+                        Spacer()
+                        //Builds spectogram from the frequency values obtained
                         ForEach(audioSpectogram.valuesP, id: \.self) {value in
-                            Spacer()
                             VStack{
                                 withAnimation {
                                     RoundedRectangle(cornerRadius: 10)
@@ -81,36 +97,58 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        Spacer()
                     }
-                    .frame(height: 200)
+                    Spacer()
                 } else if (textMode){
                     //MARK: Text Mode
                     TextMode(displayedText: $displayText)
                 } else if (torchMode) {
                     //MARK: Flashlight Mode
+                    Spacer()
+                    //Image of lightning with modifiers
                     Image("Lightning")
                         .resizable()
                         .foregroundColor(torchMode ? enabledColor : disabledColor)
                         .aspectRatio(contentMode: .fit)
                         .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.4), radius: 5, x: 0, y: 20)
+                        //dynamic size
                         .frame(height: mic.volume > threshold ? CGFloat(400 + 120 * calculateOffset(volume: mic.volume, threshold: threshold)) : 400)
                     Spacer()
+                } else {
+                    //Screen when nothing is selected
+                    VStack{
+                        Spacer()
+                        Image("DalePlay")
+                            .resizable()
+                            .scaledToFit()
+                            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.4), radius: 5, x: 0, y: 20)
+                            .padding(.horizontal)
+                        Spacer()
+                        Text("select your mode:")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.bottom)
+                    }
                 }
+                //Controll component
                 Controls(screenMode: $screenMode, torchMode: $torchMode, textMode: $textMode, threshold: $threshold, strictMode: $strictMode, displayedText: $displayText)
             }
         }
         .onChange(of: threshold) { treshold in
+            //when the slider is changed, the threshold is updated for the torch
             mic.threshhold = threshold
         }
         .onChange(of: strictMode) { strictMode in
             mic.strictMode = strictMode
         }
         .onChange(of: audioSpectogram.valuesP) {values in
+            //when the values chanve, the background color is updated
             colorLibrary.updateHue(frequencyValues: values)
             animationSides = Double((values.reduce(0, +) / 50))
         }
         .onChange(of: screenMode) {to in
+            //when screen mode is changed, the listening for frequencies is started or ended and other concurrent modes are disabled
             if to {
                 textMode = false
                 audioSpectogram.startRunning()
@@ -119,56 +157,38 @@ struct ContentView: View {
             }
         }
         .onChange(of: textMode) {to in
+            //when text mode is enabled, screen mode needs to be disabled
             if to == true {
                 screenMode = false
             }
         }
         .onChange(of: torchMode) {_ in
+            //listening for loudness is (de)activated
             mic.toggleMonitoring()
         }
-        //Show the image when screen mode not activated, else show no background
+        //background image
         .background(Image("chromeBackground")
             .resizable()
             .ignoresSafeArea())
         .onAppear() {
-            //Disable the device from going into lockscreen when using the app
+            //Disable the device from going into lockscreen when using the app (since that would defeat the purpose)
             UIApplication.shared.isIdleTimerDisabled = true
         }
     }
 }
 
-//MARK: Bar View
-
-struct BarView: View {
-    // 1
-    var value: CGFloat
-    
-    var body: some View {
-        ZStack {
-            // 2
-            RoundedRectangle(cornerRadius: 20)
-                .fill(LinearGradient(gradient: Gradient(colors: [.purple, .blue]),
-                                     startPoint: .top,
-                                     endPoint: .bottom))
-            // 3
-                .frame(width: (UIScreen.main.bounds.width - CGFloat(1) * 4) / CGFloat(1), height: value)
-        }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-
 //MARK: AnimatedBackground
+/**
+ slight overlay for the background screen mode
+ */
 struct AnimatedBackground: View {
+    //The points where the gradient starts
     @State var start = UnitPoint(x: 0, y: -2)
     @State var end = UnitPoint(x: 4, y: 0)
-    
+    //Update timer
     let timer = Timer.publish(every: 1, on: .main, in: .default).autoconnect()
     //let colors = [Color(UIColor(red: 0.621, green: 0.75, blue: 1, alpha: 1)), Color(UIColor(red: 0.381, green: 0.933, blue: 0.668, alpha: 1)), Color(UIColor(red: 1, green: 0.688, blue: 0.688, alpha: 1))]
+    //gradient colors
     let colors = [Color("gray1"),Color("gray2"),Color("gray3"),Color("gray4")]
     
     var body: some View {
@@ -185,5 +205,9 @@ struct AnimatedBackground: View {
     }
 }
 
-//colorLibrary.colors[audioSpectogram.valuesP.firstIndex(of: audioSpectogram.valuesP.max()!) ?? 0]
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
 

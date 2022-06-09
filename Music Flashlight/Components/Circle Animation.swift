@@ -8,14 +8,14 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Example 4: Polygon with lines vertex-to-vertex
-struct Example4: View {
+// MARK: Polygon with lines edge to edge
+struct PolygonAnimation: View {
     @Binding public var sides: Double
     @State private var scale: Double = 1.0
     
     var body: some View {
         VStack {
-            Example4PolygonShape(sides: sides, scale: scale)
+            PolygonShape(sides: sides, scale: scale)
                 .stroke(Color.white, lineWidth: (sides < 3) ? 10 : ( sides < 7 ? 5 : 2))
                 .padding(10)
                 .animation(.easeOut(duration: 1.25))
@@ -26,12 +26,12 @@ struct Example4: View {
 
 struct AnimationPreview_Previews: PreviewProvider {
     static var previews: some View {
-        Example4(sides: .constant(4.0))
+        PolygonAnimation(sides: .constant(4.0))
     }
 }
 
 
-struct Example4PolygonShape: Shape {
+struct PolygonShape: Shape {
     var sides: Double
     var scale: Double
     

@@ -8,16 +8,13 @@ import AVFoundation
 import Accelerate
 
 public class AudioSpectrogram: NSObject, ObservableObject {
-        
-    // MARK: Initialization
-    
+            
     override init() {
         super.init()
         
         configureCaptureSession()
         audioOutput.setSampleBufferDelegate(self,
                                             queue: captureQueue)
-        //self.startRunning()
     }
     
     required init?(coder: NSCoder) {
@@ -75,6 +72,7 @@ public class AudioSpectrogram: NSObject, ObservableObject {
     /// * Perform a forward discrete cosine transform.
     /// * Convert frequency domain values to decibels.
     func processData(values: [Int16]) {
+        //waits until the kernel is available
         dispatchSemaphore.wait()
         
         vDSP.convertElements(of: values,
@@ -100,25 +98,25 @@ public class AudioSpectrogram: NSObject, ObservableObject {
         dispatchSemaphore.signal()
         }
     
-    func reduceData(data: [Float], numberOfBars: Int) -> [Float]{
-        var res: [Float] = []
-        let len = data.count / numberOfBars
-        for i in stride(from: 0, to: numberOfBars, by: 1) {
-            var sum = Float(0)
-            for j in stride(from: len*i, to: len * (1 + i), by: 1){
-                sum = sum+data[j]+80
-            }
-            res.append(sum/Float(len))
-        }
-        //Avoid problems with dividing by zero or multiplying by zero
-        for i in 0 ..< res.count {
-            if res[i] < 1 {
-                res[i] = 1
-            }
-            
-        }
-        return res
-    }
+//    func reduceData(data: [Float], numberOfBars: Int) -> [Float]{
+//        var res: [Float] = []
+//        let len = data.count / numberOfBars
+//        for i in stride(from: 0, to: numberOfBars, by: 1) {
+//            var sum = Float(0)
+//            for j in stride(from: len*i, to: len * (1 + i), by: 1){
+//                sum = sum+data[j]+80
+//            }
+//            res.append(sum/Float(len))
+//        }
+//        //Avoid problems with dividing by zero or multiplying by zero
+//        for i in 0 ..< res.count {
+//            if res[i] < 1 {
+//                res[i] = 1
+//            }
+//
+//        }
+//        return res
+//    }
     
     func reduceDataUnevenly(data: [Float]) -> [Float]{
         var res: [Float] = []

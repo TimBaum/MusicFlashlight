@@ -10,6 +10,8 @@ import AVFAudio
 import AVFoundation
 
 class AudioMonitor: ObservableObject {
+    
+    
     private var audioRecorder: AVAudioRecorder
     private var timer: Timer?
     
@@ -22,10 +24,11 @@ class AudioMonitor: ObservableObject {
     @Published public var volume: Float
     
     init() {
-
-        self.volume = -160.0 //-160 is the minimum volume and 0 the max
+        //-160 is the minimum volume (and 0 the max)
+        self.volume = -160.0
         self.currentSample = 0
         
+        //ask for audio permission
         let audioSession = AVAudioSession.sharedInstance()
         if audioSession.recordPermission != .granted {
             audioSession.requestRecordPermission { (isGranted) in
@@ -35,7 +38,9 @@ class AudioMonitor: ObservableObject {
             }
         }
         
+        //store temp audio file in this path
         let url = URL(fileURLWithPath: "/dev/null", isDirectory: true)
+        //configure recorder
         let recorderSettings: [String:Any] = [
             AVFormatIDKey: NSNumber(value: kAudioFormatAppleLossless),
             AVSampleRateKey: 44100.0,
@@ -46,15 +51,18 @@ class AudioMonitor: ObservableObject {
         do {
             audioRecorder = try AVAudioRecorder(url: url, settings: recorderSettings)
             try audioSession.setCategory(.playAndRecord, mode: .default, options: [])
-            
         } catch {
             fatalError(error.localizedDescription)
         }
     }
     
+    /**
+     start monitoring the audio and controlling the flash
+     */
     private func startMonitoring() {
         audioRecorder.isMeteringEnabled = true
         audioRecorder.record()
+        //update every 0.005 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 0.005, repeats: true, block: { (timer) in
             self.audioRecorder.updateMeters()
             self.volume = self.audioRecorder.averagePower(forChannel: 0)
@@ -62,15 +70,20 @@ class AudioMonitor: ObservableObject {
         })
     }
     
+    /**
+     control the flash based on the volume
+     */
     func toggleFlash() {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
         guard device.hasTorch else { return }
         
         do {
+            //lock, so torch cant be used
             try device.lockForConfiguration()
-
+            //check if the volume is higher than the treshold
             if (self.volume > threshhold) {
                 let level: Float
+                //if strict mode is activated, level is 1
                 if strictMode == true {
                     level = 1
                 } else {
@@ -87,6 +100,9 @@ class AudioMonitor: ObservableObject {
         }
     }
     
+    /**
+     stop monitoring
+     */
     private func stopMonitoring() {
         timer?.invalidate()
         audioRecorder.stop()
@@ -94,6 +110,9 @@ class AudioMonitor: ObservableObject {
         toggleFlash()
     }
     
+    /**
+     toggle the monitoring process
+     */
     func toggleMonitoring() {
         if active == false {
             startMonitoring()
